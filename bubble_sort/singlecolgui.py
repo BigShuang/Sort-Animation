@@ -5,12 +5,12 @@ import random
 
 FPS = 60  # 游戏帧率
 
-WIN_WIDTH = 1200  # 窗口宽度
-WIN_HEIGHT = 980  # 窗口高度
+WIN_WIDTH = 560  # 窗口宽度
+WIN_HEIGHT = 960  # 窗口高度
 
 BUBBLE_SPACE = 40  # 气泡之间的间距
 INIT_R = 10  # 气泡初始大小-半径
-DR = 4  # 气泡数字值一个单位对应的气泡半径增加量
+DR = 3  # 气泡数字值一个单位对应的气泡半径增加量
 NUMBER = 10  # 气泡个数
 
 COLORS = {
@@ -45,9 +45,9 @@ class Bubble:
         # 想要光滑的圆，只能从png文件中导入圆的图片（图片可前往我的github下载）
         # 这一部分对于单纯的pygame动画学习者而言，并不是非常重要，所以我把与此相关的代码都给注释掉了
         # 有需要的把所有标明注释说明1-1的代码解注释就好
-        # self.image = pygame.image.load("img/bubble.png")
-        # self.select_image = pygame.image.load("img/select.png")
-        # self.resize()
+        self.image = pygame.image.load("img/bubble.png")
+        self.select_image = pygame.image.load("img/select.png")
+        self.resize()
 
     def up(self):
         # 气泡上浮
@@ -69,19 +69,19 @@ class Bubble:
         self._master.blit(text, (self.cx - text_width // 2, self.cy - text_height // 2))
 
     # 见注释说明1-1
-    # def resize(self):
-    #     self.image = pygame.transform.scale(self.image, (self.radius * 2, self.radius * 2))
-    #     self.select_image = pygame.transform.scale(self.select_image, (self.radius * 2, self.radius * 2))
-    # def draw_pic(self, current=False):
-    #     if current:
-    #         self._master.blit(self.select_image, (self.cx - self.radius, self.cy - self.radius))
-    #     else:
-    #         self._master.blit(self.image, (self.cx - self.radius, self.cy - self.radius))
-    #
-    #     text = font.render(str(self.v), 1, COLORS["text"])
-    #     text_width = text.get_width()
-    #     text_height = text.get_height()
-    #     self._master.blit(text, (self.cx - text_width // 2, self.cy - text_height // 2))
+    def resize(self):
+        self.image = pygame.transform.scale(self.image, (self.radius * 2, self.radius * 2))
+        self.select_image = pygame.transform.scale(self.select_image, (self.radius * 2, self.radius * 2))
+    def draw_pic(self, current=False):
+        if current:
+            self._master.blit(self.select_image, (self.cx - self.radius, self.cy - self.radius))
+        else:
+            self._master.blit(self.image, (self.cx - self.radius, self.cy - self.radius))
+
+        text = font.render(str(self.v), 1, COLORS["text"])
+        text_width = text.get_width()
+        text_height = text.get_height()
+        self._master.blit(text, (self.cx - text_width // 2, self.cy - text_height // 2))
 
 
 class BubbleManager:
@@ -177,10 +177,10 @@ class BubbleManager:
                     self.count += 1
 
     # 见注释说明1-1
-    # def draw_pic(self):
-    #     for j in range(len(self.bubblelist)):
-    #         db = self.bubblelist[j]
-    #         db.draw_pic(j==self.j)
+    def draw_pic(self):
+        for j in range(len(self.bubblelist)):
+            db = self.bubblelist[j]
+            db.draw_pic(j==self.j)
 
 
 class Gui:
@@ -220,12 +220,12 @@ class Gui:
 
             self.win.fill(COLORS["bg"])
             for bm in self.bmlist:
-                bm.draw()
+                bm.draw_pic()
 
             self.clock.tick(self.fps)
             pygame.display.update()
 
 
 if __name__ == '__main__':
-    gui = Gui(WIN_WIDTH, WIN_HEIGHT, 10)
+    gui = Gui(WIN_WIDTH, WIN_HEIGHT, 2)
     gui.loop()
